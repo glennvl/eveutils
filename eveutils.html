@@ -5,6 +5,21 @@
 </head>
 <body onload="addWaypoints()">
 <script type="text/javascript">
+var systems = [
+	"G95F-H",
+	"CHA2-Q",
+	"B32-14",
+	"C1XD-X",
+	"00GD-D",
+	"C-N4OD",
+	"N2-OQG",
+	"9-VO0Q",
+	"7-8S5X",
+	"D2AH-Z",
+	"B-DBYQ",
+	"J5A-IX"
+];
+
 function doXMLHttpRequest(url, callbackfunc) {
 	var xmlhttp;
 	if (window.XMLHttpRequest) {
@@ -24,30 +39,20 @@ function doXMLHttpRequest(url, callbackfunc) {
 function addTheWaypoints(xmlhttp) {
 	var xml = xmlhttp.responseXML;
 	var ids = xml.getElementsByTagName("row");
-	
+
+	var sysidmap = {};
 	for (var i = 0; i < ids.length; ++i) {
-		CCPEVE.addWaypoint(ids[i].getAttribute("characterID"));
+		sysidmap[ids[i].getAttribute("name")] = ids[i].getAttribute("characterID");
+	}
+
+	for (var j = 0; j < systems.length; ++j) {
+		CCPEVE.addWaypoint(sysidmap[systems[j]]);
 	}
 
 	window.location.assign("https://siggy.borkedlabs.com/");
 }
 
-function addWaypoints() {
-	var systems = [
-		"G95F-H",
-		"CHA2-Q",
-		"B32-14",
-		"C1XD-X",
-		"00GD-D",
-		"C-N4OD",
-		"N2-OQG",
-		"9-VO0Q",
-		"7-8S5X",
-		"D2AH-Z",
-		"B-DBYQ",
-		"J5A-IX"
-	];
-	
+function addWaypoints() {	
 	CCPEVE.requestTrust(window.location.href)
 	
 	var requesturl = "https://api.eveonline.com/eve/CharacterID.xml.aspx?names=" + systems.toString();
