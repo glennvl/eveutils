@@ -3,7 +3,7 @@
 <head>
 <title>Scanning Utilities</title>
 </head>
-<body onload="CCPEVE.requestTrust(window.location.href)">
+<body onload="addWaypoints()">
 <script type="text/javascript">
 function doXMLHttpRequest(url, callbackfunc) {
 	var xmlhttp;
@@ -48,10 +48,11 @@ function addWaypoints() {
 		"J5A-IX"
 	];
 	
+	CCPEVE.requestTrust(window.location.href)
+	
 	var requesturl = "https://api.eveonline.com/eve/CharacterID.xml.aspx?names=" + systems.toString();
 	doXMLHttpRequest(requesturl, addTheWaypoints);
 }
 </script>
-<button type="button" onclick="addWaypoints()">Set Scan Route</button>
 </body>
 </html>
