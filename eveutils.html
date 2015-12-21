@@ -36,6 +36,16 @@ function doXMLHttpRequest(url, callbackfunc) {
 	xmlhttp.send();
 }
 
+function addWaypointsDelayed(sysidmap, index) {
+	CCPEVE.addWaypoint(sysidmap[systems[index]]);
+
+	if (++index < systems.length) {
+		setTimeout(addWaypointsDelayed, 1000, sysidmap, index);
+	} else {
+		window.location.assign("https://siggy.borkedlabs.com/");
+	}
+}
+
 function addTheWaypoints(xmlhttp) {
 	var xml = xmlhttp.responseXML;
 	var ids = xml.getElementsByTagName("row");
@@ -45,11 +55,7 @@ function addTheWaypoints(xmlhttp) {
 		sysidmap[ids[i].getAttribute("name")] = ids[i].getAttribute("characterID");
 	}
 
-	for (var j = 0; j < systems.length; ++j) {
-		CCPEVE.addWaypoint(sysidmap[systems[j]]);
-	}
-
-	//window.location.assign("https://siggy.borkedlabs.com/");
+	setTimeout(addWaypointsDelayed, 1000, sysidmap, 0);
 }
 
 function addWaypoints() {	
