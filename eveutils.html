@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Scanning Utilities</title>
+</head>
+<body onload="CCPEVE.requestTrust(window.location.href)">
+<script type="text/javascript">
+function doXMLHttpRequest(url, callbackfunc) {
+	var xmlhttp;
+	if (window.XMLHttpRequest) {
+		xmlhttp = new XMLHttpRequest();
+	} else {
+		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	xmlhttp.onreadystatechange = function() {
+		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+			callbackfunc(xmlhttp);
+		}
+	};
+	xmlhttp.open("GET", url, true);
+	xmlhttp.send();
+}
+
+function addTheWaypoints(xmlhttp) {
+	var xml = xmlhttp.responseXML;
+	var ids = xml.getElementsByTagName("row");
+	
+	for (var i = 0; i < ids.length; ++i) {
+		CCPEVE.addWaypoint(ids[i].getAttribute("characterID"));
+	}
+
+	window.location.assign("https://siggy.borkedlabs.com/");
+}
+
+function addWaypoints() {
+	var systems = [
+		"G95F-H",
+		"CHA2-Q",
+		"B32-14",
+		"C1XD-X",
+		"00GD-D",
+		"C-N4OD",
+		"N2-OQG",
+		"9-VO0Q",
+		"7-8S5X",
+		"D2AH-Z",
+		"B-DBYQ",
+		"J5A-IX"
+	];
+	
+	var requesturl = "https://api.eveonline.com/eve/CharacterID.xml.aspx?names=" + systems.toString();
+	doXMLHttpRequest(requesturl, addTheWaypoints);
+}
+</script>
+<button type="button" onclick="addWaypoints()">Set Scan Route</button>
+</body>
+</html>
