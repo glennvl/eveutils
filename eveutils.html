@@ -43,6 +43,7 @@ function getCurrentSystem() {
 	var xmlhttp = newXMLHttpRequest();
 	xmlhttp.open("GET", window.location.href, false);
 	xmlhttp.send();
+	alert(xmlhttp.getAllResponseHeaders());
 	return xmlhttp.getResponseHeader("HTTP_EVE_SOLARSYSTEMNAME");
 }
 
