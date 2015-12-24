@@ -20,13 +20,16 @@ var systems = [
 	"J5A-IX"
 ];
 
-function doXMLHttpRequest(url, callbackfunc) {
-	var xmlhttp;
+function newXMLHttpRequest() {
 	if (window.XMLHttpRequest) {
-		xmlhttp = new XMLHttpRequest();
+		return new XMLHttpRequest();
 	} else {
-		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		return new ActiveXObject("Microsoft.XMLHTTP");
 	}
+}
+
+function doXMLHttpRequest(url, callbackfunc) {
+	var xmlhttp = newXMLHttpRequest();
 	xmlhttp.onreadystatechange = function() {
 		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 			callbackfunc(xmlhttp);
@@ -36,13 +39,20 @@ function doXMLHttpRequest(url, callbackfunc) {
 	xmlhttp.send();
 }
 
+function getCurrentSystem() {
+	var xmlhttp = newXMLHttpRequest();
+	xmlhttp.open("GET", window.location.href, false);
+	xmlhttp.send();
+	return xmlhttp.getResponseHeader("HTTP_EVE_SOLARSYSTEMNAME");
+}
+
 function addWaypointsDelayed(sysidmap, index) {
 	CCPEVE.addWaypoint(sysidmap[systems[index]]);
 
 	if (++index < systems.length) {
 		setTimeout(addWaypointsDelayed, 1000, sysidmap, index);
 	} else {
-		window.location.assign("https://siggy.borkedlabs.com/");
+		window.location.assign("https://tripwire.eve-apps.com/?system=" + getCurrentSystem());
 	}
 }
 
