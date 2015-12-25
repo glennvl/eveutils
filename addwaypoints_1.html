@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Scanning Utilities</title>
+</head>
+<body onload="addWaypoints()">
+<script type="text/javascript">
+var systems = [
+	"B-DBYQ",
+	"D2AH-Z",
+	"J5A-IX",
+	"G95F-H",
+	"C-N4OD",
+	"CHA2-Q",
+	"B32-14",
+	"N2-OQG",
+	"7-8S5X",
+	"J5A-IX III - Grand Viceroy Throne of Tributes"
+];
+
+function doXMLHttpRequest(url, callbackfunc) {
+	var xmlhttp;
+	if (window.XMLHttpRequest) {
+		xmlhttp = new XMLHttpRequest();
+	} else {
+		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	xmlhttp.onreadystatechange = function() {
+		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+			callbackfunc(xmlhttp);
+		}
+	};
+	xmlhttp.open("GET", url, true);
+	xmlhttp.send();
+}
+
+function addWaypointsDelayed(sysidmap, index) {
+	CCPEVE.addWaypoint(sysidmap[systems[index]]);
+
+	if (++index < systems.length) {
+		setTimeout(addWaypointsDelayed, 1000, sysidmap, index);
+	}
+}
+
+function addTheWaypoints(xmlhttp) {
+	var xml = xmlhttp.responseXML;
+	var ids = xml.getElementsByTagName("row");
+
+	var sysidmap = {};
+	for (var i = 0; i < ids.length; ++i) {
+		sysidmap[ids[i].getAttribute("name")] = ids[i].getAttribute("characterID");
+	}
+
+	setTimeout(addWaypointsDelayed, 1000, sysidmap, 0);
+}
+
+function addWaypoints() {	
+	CCPEVE.requestTrust(window.location.href)
+	
+	var requesturl = "https://api.eveonline.com/eve/CharacterID.xml.aspx?names=" + systems.toString();
+	doXMLHttpRequest(requesturl, addTheWaypoints);
+}
+</script>
+</body>
+</html>
