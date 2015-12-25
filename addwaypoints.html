@@ -5,6 +5,8 @@
 </head>
 <body onload="addWaypoints()">
 <script type="text/javascript">
+var redirecturl = "https://siggy.borkedlabs.com/";
+//var redirecturl = "https://tripwire.eve-apps.com/?system=";
 var systems = [
 	"G95F-H",
 	"CHA2-Q",
@@ -42,7 +44,7 @@ function addWaypointsDelayed(sysidmap, index) {
 	if (++index < systems.length) {
 		setTimeout(addWaypointsDelayed, 1000, sysidmap, index);
 	} else {
-		window.location.assign("https://tripwire.eve-apps.com/?system=");
+		window.location.assign(redirecturl);
 	}
 }
 
